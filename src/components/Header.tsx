@@ -142,8 +142,13 @@ const Header = () => {
 
           {/* right sided Search and menu buttons */}
           <div className=' w-1/3 flex gap-2 items-center justify-end'>
-            <SearchButton clickHandler={() => setSearch(true)} />
-            <MenuButton clickHandler={() => setIsSideBarOpen(true)} />
+            <div>
+              {search && (
+                <input className='absolute' type='text' placeholder='Search' title='Search Input' />
+              )}
+              <SearchButton clickHandler={() => setSearch(true)} />
+            </div>
+            <MenuButton clickHandler={() => setIsSideBarOpen(!search)} />
           </div>
           {isSideBarOpen && (
             <div className='fixed inset-0 z-50 overflow-hidden'>
