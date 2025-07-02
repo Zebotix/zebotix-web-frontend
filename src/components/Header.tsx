@@ -9,19 +9,19 @@ import { navLinks } from '@/lib/data/navLinks';
 import { sideBarLinks } from '@/lib/data/sideBarLinks';
 import MenuButton from './ui/MenuButton';
 import SearchButton from './ui/SearchButton';
+import { AnimatePresence } from 'framer-motion';
+import Motion from '@/utils/Motion';
 
 const Header = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
-  const [scale, setScale] = useState<number>(0);
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const router = useRouter();
 
   const handleSelect = (service: string) => {
     if (service) {
       setIsOpen(false);
-      setScale(0);
       router.push(`/services/${service.toLowerCase().replace(/\s+/g, '-')}`);
     }
     return service;
@@ -43,7 +43,7 @@ const Header = () => {
   }
   return (
     // ---------------------header started
-    <header className='flex flex-col gap-4  bg-white text-black w-screen justify-between items-center p-2 shadow-sm shadow-black'>
+    <header className='flex flex-col gap-4    w-screen justify-between items-center p-2 shadow-sm shadow-black'>
       {/* ----------------------------------Mobile View */}
       {/* -------------nav 1 */}
       <nav className='w-screen px-6 overflow-hidden flex items-center flex-row-reverse justify-between '>
@@ -92,29 +92,54 @@ const Header = () => {
                       />
                     </div>
                     {/* dropDown box for services drop down */}
-
-                    {isOpen && (
-                      <ul
-                        className={`transition-all duration-700 delay-75 ease-in-out absolute top-full mt-2 flex flex-col items-s bg-white rounded-lg outline-3 outline-blue-500 dropdown-menu${
-                          scale === 0 ? ' collapsed' : ''
-                        }`}
-                        data-scale={scale}
-                      >
-                        {services.map((s, index) => {
-                          return (
-                            <li
+                    <AnimatePresence>
+                      {isOpen && (
+                        <Motion.ul
+                          initial='hidden'
+                          animate='visible'
+                          exit='exit'
+                          variants={{
+                            hidden: { opacity: 0, scale: 0.95, y: -10 },
+                            visible: {
+                              opacity: 1,
+                              scale: 1,
+                              y: 0,
+                              transition: {
+                                type: 'spring',
+                                bounce: 0.2,
+                                duration: 0.5,
+                                delayChildren: 0.1,
+                                staggerChildren: 0.05,
+                              },
+                            },
+                            exit: {
+                              opacity: 0,
+                              scale: 0.95,
+                              y: -10,
+                              transition: { duration: 0.2 },
+                            },
+                          }}
+                          className='absolute outline-2 outline-blue-500 top-full mt-2 flex flex-col items-start bg-white rounded-lg shadow-lg overflow-hidden z-50'
+                        >
+                          {services.map((s, index) => (
+                            <Motion.li
+                              key={index}
+                              variants={{
+                                hidden: { opacity: 0, y: -5 },
+                                visible: { opacity: 1, y: 0 },
+                                exit: { opacity: 0, y: -5 },
+                              }}
                               className={`${
-                                index % 2 === 0 ? ' bg-white' : ' bg-[#f0f0f0]'
-                              } pl-2 py-2 pr-4 w-40`}
+                                index % 2 === 0 ? 'bg-white' : 'bg-[#f0f0f0]'
+                              } pl-2 py-2 pr-4 w-40 hover:bg-blue-50 cursor-pointer transition-all`}
                               onClick={() => handleSelect(s.serviceName)}
-                              key={Math.random() * 10000}
                             >
                               <Link href={`/services/${s.serviceName}`}>{s.serviceName}</Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
+                            </Motion.li>
+                          ))}
+                        </Motion.ul>
+                      )}
+                    </AnimatePresence>
                   </li>
                 );
               }

@@ -9,6 +9,7 @@ import CompanyLocation from './ui/CompanyLocation';
 import { useForm } from 'react-hook-form';
 import { AnimatePresence } from 'framer-motion';
 import Motion from '@/utils/Motion';
+import ThemeToggle from './ui/ThemeChanger/ThemeButton';
 const Footer = () => {
   const Router = useRouter();
   const [feedbackClicked, setFeedbackClicked] = useState<boolean>(false);
@@ -16,26 +17,24 @@ const Footer = () => {
     email: string;
     feedback: string;
   };
-  const [feedbackData, setFeedbackData] = useState<feedbackType>({
-    email: '',
-    feedback: '',
-  });
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<feedbackType>();
 
-  const onSubmit = (data: feedbackType) => {
+  const onSubmit = async (data: feedbackType) => {
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // 3-second delay
     console.log('Feedback Submitted:', data);
-    // 🔁 Send to API here if needed
-    reset(); // Reset form after submission
-    setFeedbackClicked(false);
+    reset(); // Reset form
+    setTimeout(() => {
+      setFeedbackClicked(false);
+    }, 2000);
   };
 
   return (
-    <footer className='min-h-[90vh] flex flex-col h-[90vh] w-screen bg-[#AEB8C8] text-black py-10 px-20'>
+    <footer className='border-t-1 min-h-[90vh] flex flex-col h-[90vh] w-screen py-10 px-20'>
       <section className='flex flex-col md:flex-row justify-between items-start gap-10 w-full h-full'>
         <div className='h-full flex flex-col justify-between items-start'>
           <Image
@@ -146,7 +145,7 @@ const Footer = () => {
                     type='submit'
                     className='w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-all'
                   >
-                    Send
+                    {isSubmitting ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit Feedback'}
                   </button>
                 </Motion.form>
               )}
@@ -183,7 +182,7 @@ const Footer = () => {
             ))}
           </li>
         </ul>
-        <p>Theme Changer Button</p>
+        <ThemeToggle />
       </section>
 
       <p className='text-center text-lg font-semibold mt-4'>

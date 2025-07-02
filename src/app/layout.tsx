@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import { LoadingProvider } from '@/hooks/LoadingContext';
 import Footer from '@/components/Footer';
+import ThemeProvider from '@/hooks/ThemeContext';
 
 // const geistSans = Geist({
 //   variable: '--font-geist-sans',
@@ -30,14 +31,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <LoadingProvider>
-      <html lang='en'>
-        <body className={`antialiased`}>
-          <Header />
-          {children}
-          <Footer />
-        </body>
-      </html>
-    </LoadingProvider>
+    <html lang='en' suppressHydrationWarning>
+      <body className=' antialiased transition-colors duration-300'>
+        <LoadingProvider>
+          {/* <ThemeWrapper> */}
+          <ThemeProvider>
+            <Header />
+            {children}
+            <Footer />
+          </ThemeProvider>
+          {/* </ThemeWrapper> */}
+        </LoadingProvider>
+      </body>
+    </html>
   );
 }
