@@ -46,12 +46,13 @@ const Header = () => {
     <header className='flex flex-col gap-4  bg-white text-black w-screen justify-between items-center p-2 shadow-sm shadow-black'>
       {/* ----------------------------------Mobile View */}
       {/* -------------nav 1 */}
-      <nav className='w-screen px-4 overflow-hidden flex items-center flex-row-reverse justify-between '>
+      <nav className='w-screen px-6 overflow-hidden flex items-center flex-row-reverse justify-between '>
         {/* ---------------------Company logo */}
         <Image
           onClick={() => router.push('/')}
           className='  w-7 h-7 md:w-14 md:h-14 '
           src='/Zebotix.png'
+          priority={false}
           alt='logo'
           width={500}
           height={500}
@@ -66,7 +67,7 @@ const Header = () => {
       </nav>
       {/* ----------nav 2 */}
       <nav>
-        <div className='relative w-screen px-4 flex justify-between '>
+        <div className='relative w-screen px-6 flex justify-between '>
           {/* ---------------navLinks list*/}
           <ul className='flex justify-between w-2/3'>
             {navLinks.map(({ label, path, id }) => {
