@@ -10,9 +10,11 @@ import { useForm } from 'react-hook-form';
 import { AnimatePresence } from 'framer-motion';
 import Motion from '@/utils/Motion';
 import ThemeToggle from './ui/ThemeChanger/ThemeButton';
+import { useTheme } from 'next-themes';
 const Footer = () => {
   const Router = useRouter();
   const [feedbackClicked, setFeedbackClicked] = useState<boolean>(false);
+  const { theme } = useTheme();
   type feedbackType = {
     email: string;
     feedback: string;
@@ -121,7 +123,7 @@ const Footer = () => {
                     id='userEmailForFeedback'
                     placeholder='your@email.com'
                     {...register('email', { required: 'Email is required' })}
-                    className='w-full px-3 py-2 mb-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
+                    className='w-full px-3 py-2 mb-1 border border-gray-300 rounded placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400'
                   />
                   {errors.email && (
                     <p className='text-xs text-red-500 mb-2'>{errors.email.message}</p>
@@ -135,7 +137,7 @@ const Footer = () => {
                     rows={4}
                     placeholder='Write your feedback...'
                     {...register('feedback', { required: 'Feedback is required' })}
-                    className='w-full px-3 py-2 mb-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none'
+                    className='w-full px-3 py-2 mb-1 border border-gray-300 rounded placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none'
                   />
                   {errors.feedback && (
                     <p className='text-xs text-red-500 mb-2'>{errors.feedback.message}</p>
@@ -169,7 +171,9 @@ const Footer = () => {
             {socialMediaLinks.map(({ icon, name, url }, index) => (
               <div key={index} className='flex items-center gap-2'>
                 <Image
-                  className='invert cursor-pointer hover:scale-110 transition-transform duration-300 w-4 h-4'
+                  className={`${
+                    theme === 'light' ? 'invert' : theme === 'dark' ? 'invert-0' : ''
+                  } cursor-pointer hover:scale-110 transition-transform duration-300 w-4 h-4`}
                   src={icon}
                   alt={name}
                   onClick={() => Router.push(url)}

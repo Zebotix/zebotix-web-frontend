@@ -1,20 +1,9 @@
 import type { Metadata } from 'next';
-// import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import { LoadingProvider } from '@/hooks/LoadingContext';
 import Footer from '@/components/Footer';
 import ThemeProvider from '@/hooks/ThemeContext';
-
-// const geistSans = Geist({
-//   variable: '--font-geist-sans',
-//   subsets: ['latin'],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: '--font-geist-mono',
-//   subsets: ['latin'],
-// });
 
 export const metadata: Metadata = {
   title: 'Zebotix - Empowering Innovation, One Solution at a Time.',
@@ -34,13 +23,11 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className=' antialiased transition-colors duration-300'>
         <LoadingProvider>
-          {/* <ThemeWrapper> */}
           <ThemeProvider>
             <Header />
             {children}
             <Footer />
           </ThemeProvider>
-          {/* </ThemeWrapper> */}
         </LoadingProvider>
       </body>
     </html>
