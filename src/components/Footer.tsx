@@ -1,13 +1,38 @@
 'use client';
 import Image from 'next/image';
 // import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { socialMediaLinks } from '@/lib/data/socialMediaLinks';
 import { legals, resources, solutions } from '@/lib/data/footerLinks';
 import CompanyLocation from './ui/CompanyLocation';
+import { useForm } from 'react-hook-form';
+import { AnimatePresence } from 'framer-motion';
+import Motion from '@/utils/Motion';
 const Footer = () => {
   const Router = useRouter();
+  const [feedbackClicked, setFeedbackClicked] = useState<boolean>(false);
+  type feedbackType = {
+    email: string;
+    feedback: string;
+  };
+  const [feedbackData, setFeedbackData] = useState<feedbackType>({
+    email: '',
+    feedback: '',
+  });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<feedbackType>();
+
+  const onSubmit = (data: feedbackType) => {
+    console.log('Feedback Submitted:', data);
+    // 🔁 Send to API here if needed
+    reset(); // Reset form after submission
+    setFeedbackClicked(false);
+  };
 
   return (
     <footer className='min-h-[90vh] flex flex-col h-[90vh] w-screen bg-[#AEB8C8] text-black py-10 px-20'>
@@ -15,7 +40,7 @@ const Footer = () => {
         <div className='h-full flex flex-col justify-between items-start'>
           <Image
             onClick={() => Router.push('/')}
-            className='w-7 h-7 md:w-14 md:h-14 '
+            className='cursor-pointer w-7 h-7 md:w-14 md:h-14 '
             src={'/Zebotix.png'}
             alt='logo'
             width={1000}
@@ -69,9 +94,73 @@ const Footer = () => {
         </section>
         <section className='h-full flex flex-col items-end'>
           <CompanyLocation />
-          <button type='button' className={` mt-2 border rounded px-2 py-1`}>
-            Feedback
-          </button>
+          <div className='relative inline-block text-left'>
+            {/* Feedback Form */}
+            <AnimatePresence>
+              {feedbackClicked && (
+                <Motion.form
+                  key='feedback-form'
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  onSubmit={handleSubmit(onSubmit)}
+                  className='absolute right-0 bottom-12 w-72 bg-white shadow-lg rounded-lg p-4 z-50 border border-gray-200'
+                >
+                  <h3 className='text-lg font-semibold mb-2 text-gray-700'>
+                    We value your feedback
+                  </h3>
+
+                  <label
+                    htmlFor='userEmailForFeedback'
+                    className='block text-sm text-gray-600 mb-1'
+                  >
+                    Email
+                  </label>
+                  <input
+                    type='email'
+                    id='userEmailForFeedback'
+                    placeholder='your@email.com'
+                    {...register('email', { required: 'Email is required' })}
+                    className='w-full px-3 py-2 mb-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
+                  />
+                  {errors.email && (
+                    <p className='text-xs text-red-500 mb-2'>{errors.email.message}</p>
+                  )}
+
+                  <label htmlFor='feedback' className='block text-sm text-gray-600 mb-1'>
+                    Feedback
+                  </label>
+                  <textarea
+                    id='feedback'
+                    rows={4}
+                    placeholder='Write your feedback...'
+                    {...register('feedback', { required: 'Feedback is required' })}
+                    className='w-full px-3 py-2 mb-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none'
+                  />
+                  {errors.feedback && (
+                    <p className='text-xs text-red-500 mb-2'>{errors.feedback.message}</p>
+                  )}
+
+                  <button
+                    type='submit'
+                    className='w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-all'
+                  >
+                    Send
+                  </button>
+                </Motion.form>
+              )}
+            </AnimatePresence>
+
+            {/* Feedback Button */}
+            <button
+              onClick={() => setFeedbackClicked(!feedbackClicked)}
+              type='button'
+              className='mt-2 border border-gray-300 rounded px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-all'
+            >
+              Feedback
+            </button>
+          </div>
         </section>
       </section>
       <section className='flex justify-between'>
@@ -85,8 +174,8 @@ const Footer = () => {
                   src={icon}
                   alt={name}
                   onClick={() => Router.push(url)}
-                  width={16}
-                  height={16}
+                  width={100}
+                  height={100}
                 />
                 {/* Add divider unless it's the last item */}
                 {index < socialMediaLinks.length - 1 && <span className='text-gray-500'>|</span>}
