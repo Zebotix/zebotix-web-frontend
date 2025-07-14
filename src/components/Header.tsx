@@ -11,6 +11,7 @@ import MenuButton from './ui/MenuButton';
 import SearchButton from './ui/SearchButton';
 import { AnimatePresence } from 'framer-motion';
 import Motion from '@/utils/Motion';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 
 const Header = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -58,12 +59,22 @@ const Header = () => {
           height={500}
         />
         {/* ---------------------login button */}
-        <Link
-          className='text-white text-base font-light bg-[#1664C0] px-2 py-1 rounded outline-none'
-          href={'/login'}
-        >
-          Sign In
-        </Link>
+        <div className='space-x-4'>
+          <SignedOut>
+            <SignInButton />
+            <SignUpButton>
+              <button
+                type='button'
+                className='bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer'
+              >
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
       </nav>
       {/* ----------nav 2 */}
       <nav>

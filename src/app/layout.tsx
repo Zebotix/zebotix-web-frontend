@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import { LoadingProvider } from '@/hooks/LoadingContext';
 import Footer from '@/components/Footer';
 import ThemeProvider from '@/hooks/ThemeContext';
-
+import { ClerkProvider } from '@clerk/nextjs';
 export const metadata: Metadata = {
   title: 'Zebotix - Empowering Innovation, One Solution at a Time.',
   description:
@@ -20,16 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
-      <body className=' antialiased transition-colors duration-300'>
-        <LoadingProvider>
-          <ThemeProvider>
-            <Header />
-            {children}
-            <Footer />
-          </ThemeProvider>
-        </LoadingProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang='en' suppressHydrationWarning>
+        <body className=' antialiased transition-colors duration-300'>
+          <LoadingProvider>
+            <ThemeProvider>
+              <Header />
+              {children}
+              <Footer />
+            </ThemeProvider>
+          </LoadingProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

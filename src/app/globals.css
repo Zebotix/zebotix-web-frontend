@@ -2,14 +2,14 @@
 
 /* Default (Light Theme) */
 :root {
-  --background: #aeb8c8;
+  --background: #ffffff;
   --foreground: #041a3d;
 }
 
 /* Dark Theme (Using Tailwind’s "dark" class) */
 .dark {
   --background: #041a3d;
-  --foreground: #aeb8c8;
+  --foreground: #ffffff;
 }
 
 /* Apply Background and Text Color */
